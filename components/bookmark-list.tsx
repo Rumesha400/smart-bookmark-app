@@ -64,7 +64,6 @@ export default function BookmarkList({
           event: "DELETE",
           schema: "public",
           table: "bookmarks",
-          // No filter - ensures we never miss DELETE events
         },
         (payload) => {
           const deletedId = payload.old.id;
