@@ -10,7 +10,7 @@ This project focuses on implementing authentication, database security, and real
 (Add after deployment)
 
 ```
-https://your-vercel-url.vercel.app
+https://smart-bookmark-app-phi-puce.vercel.app/
 ```
 
 ---
