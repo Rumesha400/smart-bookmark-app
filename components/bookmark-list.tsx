@@ -30,32 +30,26 @@ export default function BookmarkList({
       .on(
         "postgres_changes",
         {
-          event: "INSERT",
+          event: "*",
           schema: "public",
           table: "bookmarks",
           filter: `user_id=eq.${userId}`,
         },
         (payload) => {
-          const newBookmark = payload.new as Bookmark;
-          setBookmarks((prev) => {
-            if (prev.some((b) => b.id === newBookmark.id)) return prev;
-            return [newBookmark, ...prev];
-          });
-        }
-      )
-      .on(
-        "postgres_changes",
-        {
-          event: "UPDATE",
-          schema: "public",
-          table: "bookmarks",
-          filter: `user_id=eq.${userId}`,
-        },
-        (payload) => {
-          const updated = payload.new as Bookmark;
-          setBookmarks((prev) =>
-            prev.map((b) => (b.id === updated.id ? updated : b))
-          );
+          if (payload.eventType === "INSERT") {
+            const newBookmark = payload.new as Bookmark;
+            setBookmarks((prev) => {
+              if (prev.some((b) => b.id === newBookmark.id)) return prev;
+              return [newBookmark, ...prev];
+            });
+          }
+
+          if (payload.eventType === "UPDATE") {
+            const updated = payload.new as Bookmark;
+            setBookmarks((prev) =>
+              prev.map((b) => (b.id === updated.id ? updated : b))
+            );
+          }
         }
       )
       .on(
